@@ -6,4 +6,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Dirkster.NumericUpDownLib" Version="2.4.2" />
+  </ItemGroup>
+
 </Project>

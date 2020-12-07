@@ -7,6 +7,45 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <TabControl>
+            <TabItem Header="Strona główna" HorizontalAlignment="Left" Margin="-2,-2,0,0" Width="92">
+                <DataGrid/>
+            </TabItem>
+            <TabItem Header="Pesel">
 
+                <Grid ShowGridLines="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <RadioButton GroupName="gender" Content="Kobieta" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0"/>
+                    <RadioButton GroupName="gender" Content="Mężczyzna" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0"/>
+                    <RadioButton GroupName="gender" Content="Losowo" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsChecked="True" Grid.Row="1" Grid.Column="0"/>
+                    <DatePicker Grid.Column="1" HorizontalAlignment="Left" Margin="15,40,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+                    <CheckBox Content="Dzień" Grid.Column="1" HorizontalAlignment="Left" Margin="10,96,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+                    <CheckBox Content="Miesiąc" Grid.Column="1" HorizontalAlignment="Left" Margin="85,96,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+                    <CheckBox Content="Rok" Grid.Column="1" HorizontalAlignment="Left" Margin="174,96,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+                    <Label Content="Wybierz datę:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,9,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+                    <Label Content="Wybierz parametry:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,65,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+                    <Button Content="Generuj listę peselów" Grid.Column="3" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="30" Width="120"/>
+                    <TextBox Name="countPeselTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="15,157,0,0" Grid.Row="1" Text="10" TextWrapping="Wrap" VerticalAlignment="Top" Width="57"  Height="30" PreviewTextInput="OnlyNumberInTextBox"/>
+                    <ListBox Grid.Column="3" Grid.Row="1" Margin="230,0,-322,0" Height="215" VerticalAlignment="Center"/>
+                    <Label Content="Podaje liczbę peselów do wygenerowania" Grid.Column="1" Margin="10,126,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+                    <Button Content="Pobierz Json" Grid.Column="3" HorizontalAlignment="Left" Margin="10,87,0,0" Grid.Row="1" VerticalAlignment="Top" Height="33" Width="118"/>
+                    <Button Content="Pobierz txt" Grid.Column="3" Margin="10,126,2,0" Grid.Row="1" VerticalAlignment="Top" Height="35" />
+                    <Label Name="countPeselLabel"  Grid.Column="1" HorizontalAlignment="Left" Margin="77,159,0,0" Grid.Row="1" VerticalAlignment="Top" Visibility="Visible" Height="26" Width="128"/>
+
+                </Grid>
+
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
