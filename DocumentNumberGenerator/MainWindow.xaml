@@ -35,13 +35,15 @@
                     <CheckBox Content="Rok" Grid.Column="1" HorizontalAlignment="Left" Margin="174,96,0,0" Grid.Row="1" VerticalAlignment="Top"/>
                     <Label Content="Wybierz datę:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,9,0,0" Grid.Row="1" VerticalAlignment="Top"/>
                     <Label Content="Wybierz parametry:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,65,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-                    <Button Content="Generuj listę peselów" Grid.Column="3" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="30" Width="120"/>
+                    <Button Content="Generuj listę peselów" Grid.Column="3" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="30" Width="120" Click="Generate"/>
                     <TextBox Name="countPeselTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="15,157,0,0" Grid.Row="1" Text="10" TextWrapping="Wrap" VerticalAlignment="Top" Width="57"  Height="30" PreviewTextInput="OnlyNumberInTextBox"/>
-                    <ListBox Grid.Column="3" Grid.Row="1" Margin="230,0,-322,0" Height="215" VerticalAlignment="Center"/>
                     <Label Content="Podaje liczbę peselów do wygenerowania" Grid.Column="1" Margin="10,126,0,0" Grid.Row="1" VerticalAlignment="Top"/>
                     <Button Content="Pobierz Json" Grid.Column="3" HorizontalAlignment="Left" Margin="10,87,0,0" Grid.Row="1" VerticalAlignment="Top" Height="33" Width="118"/>
                     <Button Content="Pobierz txt" Grid.Column="3" Margin="10,126,2,0" Grid.Row="1" VerticalAlignment="Top" Height="35" />
                     <Label Name="countPeselLabel"  Grid.Column="1" HorizontalAlignment="Left" Margin="77,159,0,0" Grid.Row="1" VerticalAlignment="Top" Visibility="Visible" Height="26" Width="128"/>
+
+                    <ListView  Name="peselListView" Grid.Column="3" Grid.Row="1" Margin="257,0,-328,0" MinHeight="187" MaxHeight="187" ScrollViewer.VerticalScrollBarVisibility="Auto" MinWidth="187" Grid.RowSpan="10">
+                    </ListView>
 
                 </Grid>
 
