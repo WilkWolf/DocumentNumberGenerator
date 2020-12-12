@@ -41,9 +41,9 @@
                     <Button Content="Wyczyść listę" Grid.Column="1" Margin="0,10,0,0" Grid.Row="2" VerticalAlignment="Top" Height="29" Click="Button_Click" HorizontalAlignment="Right" Width="75"/>
                     <Label x:Name="countPeselLabel"  Grid.Column="0" Grid.Row="2" Visibility="Visible" Margin="10,10,10,108"/>
                     <ComboBox x:Name="GenderComboBox" HorizontalAlignment="Left" Margin="111,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="91" Grid.Column="0">
-                        <ComboBoxItem Content="Losowo" IsSelected="True"/>
-                        <ComboBoxItem Content="Kobieta"/>
-                        <ComboBoxItem Content="Mężczyzna"/>
+                        <ComboBoxItem Content="Losowo" Tag="0" IsSelected="True"/>
+                        <ComboBoxItem Content="Kobieta" Tag="1"/>
+                        <ComboBoxItem Content="Mężczyzna" Tag="2"/>
                     </ComboBox>
                     <Label Content="Wybierz płeć:" HorizontalAlignment="Left" Margin="4,101,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="0"/>
                     <Label Content="Ile wygenerować:&#xA;" HorizontalAlignment="Left" Margin="4,131,0,0" Grid.Row="1" VerticalAlignment="Top" Height="33"/>

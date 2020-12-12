@@ -6,14 +6,19 @@ namespace DocumentNumberGenerator.Pesel
 {
     class PeselGenerator
     {
-        public List<string> Generate(int count)
+        private enum GenderEnum
+        {
+            Different = 0,
+            Woman = 1,
+            Man = 2
+        }
+        public List<string> Generate(PeselSettings settings)
         {
             List<string> list = new List<string>();
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < settings.Count; i++)
             {
-                PeselModel peselModel = SetRandomNumber();
-
+                PeselModel peselModel = SetRandomNumber(settings);
                 CodeYearInMonth(ref peselModel);
                 DateFollowingZero(ref peselModel);
                 string randomPesel = BuildPeselString(peselModel);
@@ -101,18 +106,78 @@ namespace DocumentNumberGenerator.Pesel
             return date;
         }
 
-        private static PeselModel SetRandomNumber()
+        private static PeselModel SetRandomNumber(PeselSettings settings)
         {
             PeselModel peselModel = new PeselModel();
             Random random = new Random();
-            peselModel.Year = random.Next(1800, 2100).ToString();
-            peselModel.Month = random.Next(1, 13).ToString();
-            int daysInMonth = DateTime.DaysInMonth(int.Parse(peselModel.Year), int.Parse(peselModel.Month));
-            peselModel.Day = random.Next(1, daysInMonth + 1).ToString();
-            peselModel.Gender = random.Next(0, 9).ToString();
+
+            peselModel.Year = SetYearFromSettings(settings, random);
+            peselModel.Month = SetMonthFromSettings(settings, random);
+            peselModel.Gender = SetGenderFromSettings(settings, random);
             peselModel.SerialNumber = random.Next(0, 1000).ToString();
+            peselModel.Day = SetDayFromSettings(settings, peselModel, random);
 
             return peselModel;
+        }
+
+        private static string SetDayFromSettings(PeselSettings settings, PeselModel peselModel, Random random)
+        {
+            if (settings.UseDay)
+            {
+                return settings.Date.Substring(0, 2);
+            }
+
+            int daysInMonth = DateTime.DaysInMonth(int.Parse(peselModel.Year), int.Parse(peselModel.Month));
+            
+            return random.Next(1, daysInMonth + 1).ToString();
+        }
+
+        private static string SetGenderFromSettings(PeselSettings settings, Random random)
+        {
+            string gender = "";
+            switch (settings.Gender)
+            {
+                case (int)GenderEnum.Different:
+                    gender = random.Next(0, 9).ToString();
+                    break;
+                case (int)GenderEnum.Woman:
+                    int temp;
+                    do
+                    {
+                        temp = random.Next(0, 9); //0,2,4,6,8
+                    } while (temp % 2 != 0);
+                    gender = temp.ToString();
+                    break;
+                case (int)GenderEnum.Man:
+                    do
+                    {
+                        temp = random.Next(1, 10); //1,3,5,7,9
+                    } while (temp % 2 == 0);
+                    gender = temp.ToString();
+                    break;
+            }
+
+            return gender;
+        }
+
+        private static string SetMonthFromSettings(PeselSettings settings, Random random)
+        {
+            if (settings.UseMonth)
+            {
+                return settings.Date.Substring(3, 2);
+            }
+
+            return random.Next(1, 13).ToString();
+        }
+
+        private static string SetYearFromSettings(PeselSettings settings, Random random)
+        {
+            if (settings.UseYear)
+            {
+                return settings.Date.Substring(6);
+            }
+
+            return random.Next(1800, 2100).ToString();
         }
     }
 }
