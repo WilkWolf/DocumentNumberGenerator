@@ -28,19 +28,18 @@ namespace DocumentNumberGenerator
         {
             PeselGenerator pesel = new PeselGenerator();
 
-            CheckSettings();
-
             try
             {
-                int countOfPesel = int.Parse(countPeselTextBox.Text);
-                if (countOfPesel <= 0)
+                PeselSettings settings = CheckSettings();
+
+                if (settings.Count <= 0)
                 {
                     countPeselLabel.Visibility = Visibility.Visible;
                     countPeselLabel.Content = "Błąd! Wartość musi być większa od zera.";
                 }
                 else
                 {
-                    List<string> pese = pesel.Generate(countOfPesel);
+                    List<string> pese = pesel.Generate(settings);
 
                     int i = 0;
                     foreach (var item in pese)
@@ -65,20 +64,24 @@ namespace DocumentNumberGenerator
             peselListView.Items.Clear();
         }
 
-        private void CheckSettings()
+        private PeselSettings CheckSettings()
         {
+            string comboBoxTag = ((ComboBoxItem)GenderComboBox.SelectedItem).Tag.ToString();
             PeselSettings settings = new PeselSettings
             {
                 UseDay = CheckIfEnableAndChecked(IfUseDayCheckBox),
                 UseMonth = CheckIfEnableAndChecked(IfUseMonthCheckBox),
                 UseYear = CheckIfEnableAndChecked(IfUseYearCheckBox),
-                Gender = GenderComboBox.Text,
+                Gender = int.Parse(comboBoxTag),
+
                 Count = int.Parse(countPeselTextBox.Text)
             };
             if (PeselDate.SelectedDate != null)
             {
                 settings.Date = PeselDate.SelectedDate.Value.ToShortDateString();
             }
+
+            return settings;
         }
 
         private bool CheckIfEnableAndChecked(CheckBox checkbox)
@@ -113,7 +116,7 @@ namespace DocumentNumberGenerator
         public bool UseMonth { get; set; }
         public bool UseDay { get; set; }
         public bool UseYear { get; set; }
-        public string Gender { get; set; }
+        public int Gender { get; set; }
         public int Count { get; set; }
 
     }
