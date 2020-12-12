@@ -10,6 +10,9 @@ namespace DocumentNumberGenerator.Pesel
         public string Month { get; set; }
         public string Day { get; set; }
         public string CodedMonth { get; set; }
+        public string SerialNumber { get; set; }
+        public string ControlNumber { get; set; }
+        public string Gender { get; set; }
         public string YearLastDigit { get => _lastYearDigit = SetLastYearDigit(); set => _lastYearDigit = value; }
         public string YearFirstDigit { get => _firstYearDigit = SetFirstYearDigit(); set => _firstYearDigit = value; }
 
