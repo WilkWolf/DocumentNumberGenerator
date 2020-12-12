@@ -30,7 +30,7 @@ namespace DocumentNumberGenerator
 
             try
             {
-                PeselSettings settings = CheckSettings();
+                PeselSettingsModel settings = CheckSettings();
 
                 if (settings.Count <= 0)
                 {
@@ -64,10 +64,10 @@ namespace DocumentNumberGenerator
             peselListView.Items.Clear();
         }
 
-        private PeselSettings CheckSettings()
+        private PeselSettingsModel CheckSettings()
         {
             string comboBoxTag = ((ComboBoxItem)GenderComboBox.SelectedItem).Tag.ToString();
-            PeselSettings settings = new PeselSettings
+            PeselSettingsModel settings = new PeselSettingsModel
             {
                 UseDay = CheckIfEnableAndChecked(IfUseDayCheckBox),
                 UseMonth = CheckIfEnableAndChecked(IfUseMonthCheckBox),
@@ -108,16 +108,7 @@ namespace DocumentNumberGenerator
                 IfUseYearCheckBox.IsEnabled = false;
             }
         }
-    }
-
-    class PeselSettings
-    {
-        public string Date { get; set; }
-        public bool UseMonth { get; set; }
-        public bool UseDay { get; set; }
-        public bool UseYear { get; set; }
-        public int Gender { get; set; }
-        public int Count { get; set; }
 
     }
+
 }
