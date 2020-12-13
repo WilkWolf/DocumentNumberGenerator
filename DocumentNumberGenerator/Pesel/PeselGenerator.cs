@@ -12,7 +12,7 @@ namespace DocumentNumberGenerator.Pesel
             Woman = 1,
             Man = 2
         }
-        public List<string> Generate(PeselSettings settings)
+        public List<string> Generate(PeselSettingsModel settings)
         {
             List<string> list = new List<string>();
 
@@ -106,7 +106,7 @@ namespace DocumentNumberGenerator.Pesel
             return date;
         }
 
-        private static PeselModel SetRandomNumber(PeselSettings settings)
+        private static PeselModel SetRandomNumber(PeselSettingsModel settings)
         {
             PeselModel peselModel = new PeselModel();
             Random random = new Random();
@@ -120,7 +120,7 @@ namespace DocumentNumberGenerator.Pesel
             return peselModel;
         }
 
-        private static string SetDayFromSettings(PeselSettings settings, PeselModel peselModel, Random random)
+        private static string SetDayFromSettings(PeselSettingsModel settings, PeselModel peselModel, Random random)
         {
             if (settings.UseDay)
             {
@@ -132,7 +132,7 @@ namespace DocumentNumberGenerator.Pesel
             return random.Next(1, daysInMonth + 1).ToString();
         }
 
-        private static string SetGenderFromSettings(PeselSettings settings, Random random)
+        private static string SetGenderFromSettings(PeselSettingsModel settings, Random random)
         {
             string gender = "";
             switch (settings.Gender)
@@ -160,7 +160,7 @@ namespace DocumentNumberGenerator.Pesel
             return gender;
         }
 
-        private static string SetMonthFromSettings(PeselSettings settings, Random random)
+        private static string SetMonthFromSettings(PeselSettingsModel settings, Random random)
         {
             if (settings.UseMonth)
             {
@@ -170,7 +170,7 @@ namespace DocumentNumberGenerator.Pesel
             return random.Next(1, 13).ToString();
         }
 
-        private static string SetYearFromSettings(PeselSettings settings, Random random)
+        private static string SetYearFromSettings(PeselSettingsModel settings, Random random)
         {
             if (settings.UseYear)
             {

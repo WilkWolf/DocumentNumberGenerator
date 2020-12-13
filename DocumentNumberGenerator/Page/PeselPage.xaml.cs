@@ -1,0 +1,111 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using DocumentNumberGenerator.Pesel;
+using DocumentNumberGenerator.Validators;
+
+namespace DocumentNumberGenerator
+{
+    /// <summary>
+    /// Interaction logic for Page1.xaml
+    /// </summary>
+    public partial class Page1 : Page
+    {
+        public Page1()
+        {
+            InitializeComponent();
+        }
+        private IValidators validators = new Validators.Validators();
+        private void OnlyNumberInTextBox(object sender, TextCompositionEventArgs e)
+        {
+            validators.OnlyNumber(e, countPeselTextBox, countPeselLabel);
+        }
+
+        private void Generate(object sender, RoutedEventArgs e)
+        {
+            PeselGenerator pesel = new PeselGenerator();
+
+            try
+            {
+                PeselSettingsModel settings = CheckSettings();
+
+                if (settings.Count <= 0)
+                {
+                    countPeselLabel.Visibility = Visibility.Visible;
+                    countPeselLabel.Content = "Błąd! Wartość musi być większa od zera.";
+                }
+                else
+                {
+                    List<string> pese = pesel.Generate(settings);
+
+                    int i = 0;
+                    foreach (var item in pese)
+                    {
+                        peselListView.Items.Insert(i, item);
+                        i++;
+                    }
+
+                    countPeselLabel.Visibility = Visibility.Hidden;
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                countPeselLabel.Content = "Błąd! Podaj prawidłową wartość.";
+                countPeselLabel.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            peselListView.Items.Clear();
+        }
+
+        private PeselSettingsModel CheckSettings()
+        {
+            string comboBoxTag = ((ComboBoxItem)GenderComboBox.SelectedItem).Tag.ToString();
+            PeselSettingsModel settings = new PeselSettingsModel
+            {
+                UseDay = CheckIfEnableAndChecked(IfUseDayCheckBox),
+                UseMonth = CheckIfEnableAndChecked(IfUseMonthCheckBox),
+                UseYear = CheckIfEnableAndChecked(IfUseYearCheckBox),
+                Gender = int.Parse(comboBoxTag),
+
+                Count = int.Parse(countPeselTextBox.Text)
+            };
+            if (PeselDate.SelectedDate != null)
+            {
+                settings.Date = PeselDate.SelectedDate.Value.ToShortDateString();
+            }
+
+            return settings;
+        }
+
+        private bool CheckIfEnableAndChecked(CheckBox checkbox)
+        {
+            if (checkbox.IsEnabled && checkbox.IsChecked.GetValueOrDefault())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private void PeselDate_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (PeselDate.SelectedDate.HasValue)
+            {
+                IfUseDayCheckBox.IsEnabled = true;
+                IfUseMonthCheckBox.IsEnabled = true;
+                IfUseYearCheckBox.IsEnabled = true;
+            }
+            else
+            {
+                IfUseDayCheckBox.IsEnabled = false;
+                IfUseMonthCheckBox.IsEnabled = false;
+                IfUseYearCheckBox.IsEnabled = false;
+            }
+        }
+    }
+}
