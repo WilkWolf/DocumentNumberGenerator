@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DocumentNumberGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="362" Width="422">
+        Title="MainWindow" Height="410" Width="446">
     <Grid>
         <TabControl>
             <TabItem Header="Strona główna" HorizontalAlignment="Left" Margin="-2,-2,0,0" Width="92">

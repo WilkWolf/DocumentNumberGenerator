@@ -1,26 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClosedXML.Excel;
 using DocumentNumberGenerator.Pesel;
 using DocumentNumberGenerator.Validators;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace DocumentNumberGenerator
 {
     /// <summary>
     /// Interaction logic for Page1.xaml
     /// </summary>
-    public partial class Page1 : Page
+    public partial class PeselPage : Page
     {
-        public Page1()
+        public PeselPage()
         {
             InitializeComponent();
         }
-        private IValidators validators = new Validators.Validators();
+        private IValidators _validators = new Validators.Validators();
         private void OnlyNumberInTextBox(object sender, TextCompositionEventArgs e)
         {
-            validators.OnlyNumber(e, countPeselTextBox, countPeselLabel);
+            _validators.OnlyNumber(e, countPeselTextBox, countPeselLabel);
         }
 
         private void Generate(object sender, RoutedEventArgs e)
@@ -105,6 +110,61 @@ namespace DocumentNumberGenerator
                 IfUseDayCheckBox.IsEnabled = false;
                 IfUseMonthCheckBox.IsEnabled = false;
                 IfUseYearCheckBox.IsEnabled = false;
+            }
+        }
+
+        private void ButtonDownloadJson_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Txt files (*.txt)|*.txt|Json files (*.json)|*.json|All files (*.*)|*.*";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var json = JsonConvert.SerializeObject(peselListView.Items);
+                File.WriteAllText(saveFileDialog.FileName, json);
+            }
+        }
+
+        private void ButtonDownloadTxt_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            StringBuilder stringBuilder = new StringBuilder();
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                foreach (var s in peselListView.Items.SourceCollection)
+                {
+                    stringBuilder.Append(s + "\r\n");
+                }
+
+                File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
+            }
+        }
+
+        private void ButtonDownloadXlsx_Click(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Excel files|*.xlsx",
+                Title = "Save an Excel File"
+            };
+
+            saveFileDialog.ShowDialog();
+
+            if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
+            {
+                var workbook = new XLWorkbook();
+                workbook.AddWorksheet("Pesel");
+                var worksheet = workbook.Worksheet("Pesel");
+
+                int row = 1;
+                foreach (object item in peselListView.Items)
+                {
+                    worksheet.Cell("A" + row.ToString()).SetValue<string>(item.ToString());
+                    row++;
+                }
+
+                workbook.SaveAs(saveFileDialog.FileName);
             }
         }
     }
