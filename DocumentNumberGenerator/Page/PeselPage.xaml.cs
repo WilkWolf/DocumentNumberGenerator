@@ -22,7 +22,9 @@ namespace DocumentNumberGenerator
         {
             InitializeComponent();
         }
-        private IValidators _validators = new Validators.Validators();
+
+        private readonly IValidators _validators = new Validators.Validators();
+
         private void OnlyNumberInTextBox(object sender, TextCompositionEventArgs e)
         {
             _validators.OnlyNumber(e, countPeselTextBox, countPeselLabel);
@@ -30,7 +32,8 @@ namespace DocumentNumberGenerator
 
         private void Generate(object sender, RoutedEventArgs e)
         {
-            PeselGenerator pesel = new PeselGenerator();
+            IPeselGenerator pesel = new PeselGenerator();
+            
             try
             {
                 PeselSettingsModel settings = CheckSettings();
@@ -42,13 +45,13 @@ namespace DocumentNumberGenerator
                 }
                 else
                 {
-                    List<string> pese = pesel.Generate(settings);
+                    List<string> peselList = pesel.Generate(settings);
 
-                    int i = 0;
-                    foreach (var item in pese)
+                    int index = 0;
+                    foreach (var item in peselList)
                     {
-                        peselListView.Items.Insert(i, item);
-                        i++;
+                        peselListView.Items.Insert(index, item);
+                        index++;
                     }
 
                     countPeselLabel.Visibility = Visibility.Hidden;
@@ -62,7 +65,7 @@ namespace DocumentNumberGenerator
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ClearPeselListWindow_Click(object sender, RoutedEventArgs e)
         {
             peselListView.Items.Clear();
         }
@@ -70,6 +73,7 @@ namespace DocumentNumberGenerator
         private PeselSettingsModel CheckSettings()
         {
             string comboBoxTag = ((ComboBoxItem)GenderComboBox.SelectedItem).Tag.ToString();
+
             PeselSettingsModel settings = new PeselSettingsModel
             {
                 UseDay = CheckIfEnableAndChecked(IfUseDayCheckBox),
@@ -79,6 +83,7 @@ namespace DocumentNumberGenerator
 
                 Count = int.Parse(countPeselTextBox.Text)
             };
+
             if (PeselDate.SelectedDate != null)
             {
                 settings.Date = PeselDate.SelectedDate.Value.ToShortDateString();
@@ -89,11 +94,7 @@ namespace DocumentNumberGenerator
 
         private bool CheckIfEnableAndChecked(CheckBox checkbox)
         {
-            if (checkbox.IsEnabled && checkbox.IsChecked.GetValueOrDefault())
-            {
-                return true;
-            }
-            return false;
+            return checkbox.IsEnabled && checkbox.IsChecked.GetValueOrDefault();
         }
 
         private void PeselDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -112,10 +113,30 @@ namespace DocumentNumberGenerator
             }
         }
 
-        private void ButtonDownloadJson_Click(object sender, RoutedEventArgs e)
+        private bool CheckIfPeselListIsEmpty()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Txt files (*.txt)|*.txt|Json files (*.json)|*.json|All files (*.*)|*.*";
+            if (peselListView.Items.Count == 0)
+            {
+                countPeselLabel.Content = "Brak peseli do zapisania.";
+                countPeselLabel.Visibility = Visibility.Visible;
+                return true;
+            }
+
+            return false;
+        }
+
+        private void DownloadJson_Click(object sender, RoutedEventArgs e)
+        {
+            if (CheckIfPeselListIsEmpty())
+            {
+                return;
+            }
+
+            countPeselLabel.Content = "";
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Json files (*.json)|*.json|Txt files (*.txt)|*.txt|All files (*.*)|*.*"
+            };
 
             if (saveFileDialog.ShowDialog() == true)
             {
@@ -124,25 +145,39 @@ namespace DocumentNumberGenerator
             }
         }
 
-        private void ButtonDownloadTxt_Click(object sender, RoutedEventArgs e)
+        private void DownloadTxt_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (CheckIfPeselListIsEmpty())
+            {
+                return;
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Txt files (*.txt)|*.txt|All files (*.*)|*.*"
+            };
+
             StringBuilder stringBuilder = new StringBuilder();
+
             if (saveFileDialog.ShowDialog() == true)
             {
-                foreach (var s in peselListView.Items.SourceCollection)
+                foreach (object peselItem in peselListView.Items.SourceCollection)
                 {
-                    stringBuilder.Append(s + "\r\n");
+                    stringBuilder.Append(peselItem + "\r\n");
                 }
 
                 File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
             }
         }
 
-        private void ButtonDownloadXlsx_Click(object sender, RoutedEventArgs e)
+        private void DownloadXlsx_Click(object sender, RoutedEventArgs e)
         {
-            var saveFileDialog = new SaveFileDialog
+            if (CheckIfPeselListIsEmpty())
+            {
+                return;
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "Excel files|*.xlsx",
                 Title = "Save an Excel File"
@@ -150,11 +185,12 @@ namespace DocumentNumberGenerator
 
             saveFileDialog.ShowDialog();
 
-            if (!String.IsNullOrWhiteSpace(saveFileDialog.FileName))
+            if (!string.IsNullOrWhiteSpace(saveFileDialog.FileName))
             {
-                var workbook = new XLWorkbook();
+                XLWorkbook workbook = new XLWorkbook();
                 workbook.AddWorksheet("Pesel");
-                var worksheet = workbook.Worksheet("Pesel");
+
+                IXLWorksheet worksheet = workbook.Worksheet("Pesel");
 
                 int row = 1;
                 foreach (object item in peselListView.Items)

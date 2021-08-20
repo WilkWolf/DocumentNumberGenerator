@@ -1,7 +1,7 @@
 ﻿
 namespace DocumentNumberGenerator.Pesel
 {
-    class PeselSettingsModel
+   public class PeselSettingsModel
     {
         public string Date { get; set; }
         public bool UseMonth { get; set; }

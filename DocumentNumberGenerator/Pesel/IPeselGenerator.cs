@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DocumentNumberGenerator.Pesel
 {
     interface IPeselGenerator
     {
-        string Generate();
+        List<string> Generate(PeselSettingsModel settings);
     }
 }
