@@ -31,7 +31,6 @@ namespace DocumentNumberGenerator
         private void Generate(object sender, RoutedEventArgs e)
         {
             PeselGenerator pesel = new PeselGenerator();
-
             try
             {
                 PeselSettingsModel settings = CheckSettings();
@@ -97,7 +96,7 @@ namespace DocumentNumberGenerator
             return false;
         }
 
-        private void PeselDate_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void PeselDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PeselDate.SelectedDate.HasValue)
             {
