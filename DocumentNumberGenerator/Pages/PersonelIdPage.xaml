@@ -1,0 +1,38 @@
+﻿<Page x:Class="DocumentNumberGenerator.PersonelIdPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DocumentNumberGenerator"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PersonelIdPage">
+
+    <Grid ShowGridLines="false" HorizontalAlignment="Left" Width="440" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" MinWidth="210"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto" MinHeight="224"></RowDefinition>
+            <RowDefinition Height="auto" MinHeight="192"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" Grid.Row="2" Margin="0,0,0,75"/>
+
+        <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1"/>
+
+        <Button Content="Generuj listę numerów Dowodów osobistych" HorizontalAlignment="Center" Margin="0,178,0,0" Grid.Row="1" VerticalAlignment="Top" Height="30" Width="120" />
+        <TextBox x:Name="countNumberToGenerateTextBox" Grid.Column="0" HorizontalAlignment="Left" Margin="101,16,0,0" Grid.Row="1" Text="10" TextWrapping="Wrap" VerticalAlignment="Top" Width="55"  Height="20"/>
+        <Button Content="Pobierz Json" Grid.Column="1" Margin="0,10,113,0" Grid.Row="2" VerticalAlignment="Top" Height="29" HorizontalAlignment="Right" Width="74" />
+        <Button Content="Pobierz txt" Grid.Column="1" Margin="10,44,113,0" Grid.Row="2" VerticalAlignment="Top" Height="24"  />
+
+        <ListView  x:Name="peselListView" Grid.Column="1" Grid.Row="1" MinHeight="187" MaxHeight="187" ScrollViewer.VerticalScrollBarVisibility="Auto" MinWidth="187" Height="188" VerticalAlignment="Center" HorizontalAlignment="Left" Width="187" Margin="10,0,0,0"/>
+        <Button Content="Wyczyść listę" Grid.Column="1" Margin="0,10,0,0" Grid.Row="2" VerticalAlignment="Top" Height="29"  HorizontalAlignment="Right" Width="75"/>
+        <Label x:Name="countPeselLabel"  Grid.Column="0" Grid.Row="2" Visibility="Visible" Margin="10,10,10,108"/>
+        <Label Content="Ile wygenerować:&#xA;" HorizontalAlignment="Left" Margin="0,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="33"/>
+        <Button Content="Pobierz Excel" Grid.Column="1" Margin="10,73,113,0" Grid.Row="2" VerticalAlignment="Top" Height="24"  />
+
+    </Grid>
+</Page>

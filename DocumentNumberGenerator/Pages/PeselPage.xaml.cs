@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClosedXML.Excel;
+using DocumentNumberGenerator.Common;
 using DocumentNumberGenerator.Pesel;
 using DocumentNumberGenerator.Validators;
 using Microsoft.Win32;
@@ -24,7 +25,7 @@ namespace DocumentNumberGenerator
         }
 
         private readonly IValidators _validators = new Validators.Validators();
-
+        private IDownload _download = new Download();
         private void OnlyNumberInTextBox(object sender, TextCompositionEventArgs e)
         {
             _validators.OnlyNumber(e, countPeselTextBox, countPeselLabel);
@@ -132,17 +133,7 @@ namespace DocumentNumberGenerator
                 return;
             }
 
-            countPeselLabel.Content = "";
-            SaveFileDialog saveFileDialog = new SaveFileDialog
-            {
-                Filter = "Json files (*.json)|*.json|Txt files (*.txt)|*.txt|All files (*.*)|*.*"
-            };
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                var json = JsonConvert.SerializeObject(peselListView.Items);
-                File.WriteAllText(saveFileDialog.FileName, json);
-            }
+            _download.Json(peselListView);
         }
 
         private void DownloadTxt_Click(object sender, RoutedEventArgs e)
@@ -152,22 +143,7 @@ namespace DocumentNumberGenerator
                 return;
             }
 
-            SaveFileDialog saveFileDialog = new SaveFileDialog
-            {
-                Filter = "Txt files (*.txt)|*.txt|All files (*.*)|*.*"
-            };
-
-            StringBuilder stringBuilder = new StringBuilder();
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                foreach (object peselItem in peselListView.Items.SourceCollection)
-                {
-                    stringBuilder.Append(peselItem + "\r\n");
-                }
-
-                File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
-            }
+            _download.Txt(peselListView);
         }
 
         private void DownloadXlsx_Click(object sender, RoutedEventArgs e)
@@ -177,30 +153,7 @@ namespace DocumentNumberGenerator
                 return;
             }
 
-            SaveFileDialog saveFileDialog = new SaveFileDialog
-            {
-                Filter = "Excel files|*.xlsx",
-                Title = "Save an Excel File"
-            };
-
-            saveFileDialog.ShowDialog();
-
-            if (!string.IsNullOrWhiteSpace(saveFileDialog.FileName))
-            {
-                XLWorkbook workbook = new XLWorkbook();
-                workbook.AddWorksheet("Pesel");
-
-                IXLWorksheet worksheet = workbook.Worksheet("Pesel");
-
-                int row = 1;
-                foreach (object item in peselListView.Items)
-                {
-                    worksheet.Cell("A" + row.ToString()).SetValue<string>(item.ToString());
-                    row++;
-                }
-
-                workbook.SaveAs(saveFileDialog.FileName);
-            }
+            _download.Excel(peselListView);
         }
     }
 }

@@ -12,8 +12,12 @@
                 <DataGrid/>
             </TabItem>
             <TabItem Header="Pesel"  Height="20" VerticalAlignment="Top">
-            <Frame Source="/Page/PeselPage.xaml"/> 
+            <Frame Source="/Pages/PeselPage.xaml"/> 
                
+            </TabItem>
+            <TabItem Header="PersonelIdPage"  Height="20" VerticalAlignment="Top">
+                <Frame Source="/Pages/PersonelIdPage.xaml"/>
+
             </TabItem>
         </TabControl>
     </Grid>
